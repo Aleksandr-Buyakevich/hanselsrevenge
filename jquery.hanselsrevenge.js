@@ -52,8 +52,8 @@ function BreadCrumbTrail(options){
         path: "/"
       },
       debug: false,
-      titleCallback: null
-
+      titleCallback: null,
+      isFirstCrumbAlwaysRoot: true
     };
   this.options = jQuery.extend(defaultOptions, options);
   this.trail = [];
@@ -202,10 +202,12 @@ function BreadCrumbTrail(options){
         for (var i = depth-1; i >= 0; i--) {
           var item =  breadCrumb.trail.pop();
           item.text = breadCrumb.links[item.link];
-          var domEl = (i == 0) ? $("<a href='/' class='btn btn-default'><div>" + item.text + "</div></a>") : $("<a class='btn btn-default' href='" + item.link + "'><div>" + item.text + "</div></a>");   
+          var domEl = (options.isFirstCrumbAlwaysRoot && i == 0)
+                        ? $("<a href='/' class='btn btn-default'><div>" + item.text + "</div></a>")
+                        : $("<a class='btn btn-default' href='" + item.link + "'><div>" + item.text + "</div></a>");
           bcContainer.prepend(domEl);
           totalWidth += domEl.width();
-          var containerWidth =bcContainer.parent().width();       
+          var containerWidth = bcContainer.parent().width();       
        }
       }
     }
