@@ -193,6 +193,9 @@ function BreadCrumbTrail(options){
     }
 
     breadCrumb.push({link:path, text:titleFx(options)});
+    
+    var currentTrail = breadCrumb.trail.slice(0); // @5494
+    
     if (breadCrumb.trail.length > 0){
       $.cookie(cookieKey, JSON.stringify(breadCrumb.trail), options.cookieOptions);
       if (bcContainer.length > 0){
@@ -211,5 +214,16 @@ function BreadCrumbTrail(options){
        }
       }
     }
+    
+    // Update current URL in the last bread crumb (@5494)
+    var updateCurrentUrl = function () {
+        if (currentTrail && currentTrail.length) {
+            var crumb = currentTrail[currentTrail.length - 1];
+            crumb.link = document.location.pathname + document.location.search + document.location.hash;
+            $.cookie(cookieKey, JSON.stringify(currentTrail), options.cookieOptions);
+        }
+    }
+
+    return updateCurrentUrl; // @5494    
   };
 })(jQuery);
